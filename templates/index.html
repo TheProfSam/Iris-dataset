@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Flower Classification System</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+
+            background:
+            linear-gradient(
+            135deg,
+            #667eea 0%,
+            #764ba2 100%
+            );
+        }
+
+        .container{
+            width:100%;
+            max-width:600px;
+
+            background:rgba(255,255,255,0.12);
+
+            backdrop-filter:blur(15px);
+            -webkit-backdrop-filter:blur(15px);
+
+            border:1px solid rgba(255,255,255,0.2);
+
+            border-radius:25px;
+
+            padding:40px;
+
+            box-shadow:
+            0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .header{
+            text-align:center;
+            margin-bottom:35px;
+        }
+
+
+        h1{
+            color:white;
+            font-size:2rem;
+            margin-bottom:10px;
+        }
+
+        .subtitle{
+            color:rgba(255,255,255,0.85);
+            line-height:1.6;
+        }
+
+        .form-group{
+            margin-bottom:20px;
+        }
+
+        label{
+            display:block;
+            color:white;
+            font-weight:600;
+            margin-bottom:8px;
+        }
+
+        .range{
+            color:#d8d8d8;
+            font-size:12px;
+            font-weight:normal;
+        }
+
+        input{
+            width:100%;
+            padding:14px 16px;
+
+            border:none;
+            border-radius:12px;
+
+            font-size:16px;
+
+            background:rgba(255,255,255,0.95);
+
+            transition:all 0.3s ease;
+        }
+
+        input:focus{
+            outline:none;
+
+            transform:translateY(-2px);
+
+            box-shadow:
+            0 0 0 4px rgba(255,255,255,0.25);
+        }
+
+        button{
+            width:100%;
+            padding:16px;
+
+            border:none;
+            border-radius:14px;
+
+            background:
+            linear-gradient(
+            135deg,
+            #00c6ff,
+            #0072ff
+            );
+
+            color:white;
+
+            font-size:17px;
+            font-weight:600;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        button:hover{
+            transform:translateY(-3px);
+
+            box-shadow:
+            0 10px 25px rgba(0,114,255,0.4);
+        }
+
+        .result{
+            margin-top:25px;
+
+            background:rgba(46,204,113,0.18);
+
+            border:1px solid rgba(46,204,113,0.5);
+
+            border-radius:15px;
+
+            padding:20px;
+
+            text-align:center;
+        }
+
+        .result-title{
+            color:#ffffff;
+            font-size:14px;
+            margin-bottom:8px;
+            opacity:0.9;
+        }
+
+        .prediction{
+            color:#ffffff;
+            font-size:26px;
+            font-weight:700;
+        }
+
+        .error{
+            margin-top:25px;
+
+            background:rgba(231,76,60,0.18);
+
+            border:1px solid rgba(231,76,60,0.5);
+
+            color:white;
+
+            text-align:center;
+
+            border-radius:15px;
+
+            padding:18px;
+        }
+
+        .footer{
+            text-align:center;
+            color:rgba(255,255,255,.8);
+
+            margin-top:25px;
+            font-size:13px;
+        }
+
+        @media(max-width:600px){
+
+            .container{
+                padding:25px;
+            }
+
+            h1{
+                font-size:1.6rem;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        
+
+        <h1>Iris Flower Classifier</h1>
+
+        <p class="subtitle">
+            Machine Learning-powered prediction system for
+            identifying Iris flower species based on
+            morphological characteristics.
+        </p>
+
+    </div>
+
+    <form action="/predict" method="POST">
+
+        <div class="form-group">
+
+            <label for="sepal_length">
+                Sepal Length
+                <span class="range">(4.3 - 7.9 cm)</span>
+            </label>
+
+            <input
+                type="number"
+                id="sepal_length"
+                name="sepal_length"
+                min="4.3"
+                max="7.9"
+                step="0.1"
+                placeholder="Example: 5.1"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="sepal_width">
+                Sepal Width
+                <span class="range">(2.0 - 4.4 cm)</span>
+            </label>
+
+            <input
+                type="number"
+                id="sepal_width"
+                name="sepal_width"
+                min="2.0"
+                max="4.4"
+                step="0.1"
+                placeholder="Example: 3.5"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="petal_length">
+                Petal Length
+                <span class="range">(1.0 - 6.9 cm)</span>
+            </label>
+
+            <input
+                type="number"
+                id="petal_length"
+                name="petal_length"
+                min="1.0"
+                max="6.9"
+                step="0.1"
+                placeholder="Example: 1.4"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="petal_width">
+                Petal Width
+                <span class="range">(0.1 - 2.5 cm)</span>
+            </label>
+
+            <input
+                type="number"
+                id="petal_width"
+                name="petal_width"
+                min="0.1"
+                max="2.5"
+                step="0.1"
+                placeholder="Example: 0.2"
+                required>
+
+        </div>
+
+        <button type="submit">
+            Predict Species
+        </button>
+
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        <div class="result-title">
+            Predicted Iris Species
+        </div>
+
+        <div class="prediction">
+            {{ prediction }}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        Powered by Scikit-Learn Random Forest Classifier
+    </div>
+
+</div>
+
+</body>
+</html>
